@@ -8,8 +8,8 @@ public class Packet implements Serializable {
 	// Generated serialVersionUID
    private static final long serialVersionUID = 1811522088531690623L;
 
-	enum PACKET_TYPE { MESSAGE, NAME, CLIENT_LIST, SIGNAL }
-	enum SIGNAL { EXIT }
+	enum PACKET_TYPE { MESSAGE, CLIENT_LIST, SIGNAL }
+	enum SIGNAL { ENTER, EXIT }
 	
 	PACKET_TYPE packet_type 	= null;
 	SIGNAL signal 					= null;
@@ -33,12 +33,6 @@ public class Packet implements Serializable {
 		signal_packet.source = pSource;
 		signal_packet.signal = pSignal;
 		return signal_packet;
-	}
-	
-	public static Packet sendName(String pSource, String name) {
-		Packet name_packet = new Packet(PACKET_TYPE.NAME);
-		name_packet.source = pSource;		
-		return name_packet;
 	}
 	
 	public static Packet sendClientList(String pSource, Vector<String> pList) {

@@ -41,21 +41,22 @@ public class Connection {
 							case SIGNAL:
 							{
 								switch(packet.signal) {
+									case ENTER:
+										name = packet.source;
+										server.broadcast(Packet.sendMessage("SERVER",
+															  name +	" has entered."));
+										server.updateClientLists();
+										break;
 									case EXIT:
 										terminate();										
 										server.updateClientLists();
 										running = false;
 										break;
-									default:
+									default:										
 								}
 								break;
 							}
 						case CLIENT_LIST:
-							break;
-						case NAME:
-							name = packet.source;
-							server.broadcast(Packet.sendMessage("SERVER", name + " has entered."));
-							server.updateClientLists();
 							break;
 						default:
 							break;

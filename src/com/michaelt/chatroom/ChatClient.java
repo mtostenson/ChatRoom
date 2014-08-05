@@ -65,7 +65,8 @@ public class ChatClient extends JFrame {
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
             	try {
-            		output.writeObject(Packet.sendSignal(clientName, Packet.SIGNAL.EXIT));
+            		output.writeObject(Packet.sendSignal(clientName, 
+            														 Packet.SIGNAL.EXIT));
             		input.close();
             		output.close();
 	               connection.close();
@@ -84,7 +85,8 @@ public class ChatClient extends JFrame {
 			@Override
          public void actionPerformed(ActionEvent ae) {
 				try {
-					output.writeObject(Packet.sendMessage(clientName, text_input.getText()));
+					output.writeObject(Packet.sendMessage(clientName, 
+																	  text_input.getText()));
 					text_input.setText("");
 				}
 				catch(Exception e) {
@@ -100,7 +102,7 @@ public class ChatClient extends JFrame {
 			connection = new Socket(InetAddress.getByName(hostname), port);
 			output = new ObjectOutputStream(connection.getOutputStream());
 			input  = new ObjectInputStream(connection.getInputStream());			
-			output.writeObject(Packet.sendName(clientName, clientName));
+			output.writeObject(Packet.sendSignal(clientName, Packet.SIGNAL.ENTER));
 			output.flush();
 		}
 		catch(IOException ioe) {

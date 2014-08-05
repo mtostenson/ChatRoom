@@ -62,7 +62,9 @@ public class ChatServer {
 
 	public void dropConnection(Connection pConnection) {
 		connections.remove(pConnection);
-		broadcast(Packet.sendMessage("SERVER", pConnection.name + " has left the room."));
+		broadcast(Packet.sendMessage("SERVER", 
+											  pConnection.name + 
+											  " has left the room."));
 		System.out.println("Client " + 
 								 pConnection.name + 
 								 " has disconnected.");
