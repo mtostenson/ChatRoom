@@ -39,7 +39,7 @@ public class ChatServer {
 						catch(Exception e) {
 							System.err.println(e);
 						}
-						broadcast("SERVER", newClient.name + " has connected.");
+						broadcast("SERVER", newClient.name + " has entered.");
 						connections.add(newClient);
 						newClient.listenToConnection();
 						System.out.println("Total clients: " + connections.size());
@@ -64,4 +64,13 @@ public class ChatServer {
 			}
 		}
 	}
+
+	public void dropConnection(Connection pConnection) {
+		broadcast("SERVER", pConnection.name + " has left the room.");
+		System.out.println("Client " + 
+								 pConnection.name + 
+								 " has disconnected.");
+		connections.remove(pConnection);
+		System.out.println("Total clients: " + connections.size());
+   }
 }

@@ -13,6 +13,7 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -41,6 +42,7 @@ public class ChatClient extends JFrame {
 		add(scroller);
 		setSize(400, 300);
 		setVisible(true);
+		setResizable(false);
 		clientName = JOptionPane.showInputDialog(this, 
 															  "Name?", 
 															  "Provide name",
@@ -99,7 +101,9 @@ public class ChatClient extends JFrame {
 		while(true) {
 			try{
 				String message = (String)input.readObject();
-				text_display.append(message);				
+				text_display.append(message);
+			   JScrollBar vertical = scroller.getVerticalScrollBar();
+			   vertical.setValue(vertical.getMaximum());
 			}
 			catch(Exception e) {
 				System.err.println(e);
