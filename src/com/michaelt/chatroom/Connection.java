@@ -32,7 +32,13 @@ public class Connection {
 			public void run() {
 				while(true) {
 					try {
-						server.broadcast(name, (String)input.readObject());
+						String message = (String)input.readObject();
+						if(message.equals("SERVER_SIGNAL_EXIT")) {							
+							terminate();
+						}
+						else {
+							server.broadcast(name, message);							
+						}	
 					}
 					catch(Exception e) {
 						System.err.println(e);
@@ -45,6 +51,8 @@ public class Connection {
 	
 	public void terminate() {
 		try {
+			server.broadcast("SERVER", name + " has disconnected.");
+			server.connections.remove(this);
 	      input.close();
 	      output.close();
 	      socket.close();
