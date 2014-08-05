@@ -33,18 +33,11 @@ public class ChatServer {
 						                   .getInetAddress()
 						                   .getHostAddress() 
 						                   + " connected.");
-						try {
-							newClient.name = (String)newClient.input.readObject();
-						} 
-						catch(Exception e) {
-							System.err.println(e);
-						}
-						broadcast("SERVER", newClient.name + " has entered.");
 						connections.add(newClient);
 						newClient.listenToConnection();
-						System.out.println("Total clients: " + connections.size());
+						System.out.println("Total clients: " + connections.size());						
 					}
-				}
+				} 
 				catch(IOException ioe) { 
 					System.err.println(ioe); 
 				}
@@ -54,23 +47,34 @@ public class ChatServer {
 	}	
 	
 	// Send message to all clients ----------------------------------------------
-	public void broadcast(String source, String message) {
+	public void broadcast(Packet packet) {
 		for(Connection client : connections) {
 			try {				
-				client.output.writeObject(source + " says: " + message + "\n");
+				client.output.writeObject(packet);
 			}
 			catch(IOException ioe) {
+				System.err.println("CHECK");
+//				System.err.println("MESSAGE: " + ioe.getCause().getMessage());
 				System.err.println(ioe);
 			}
 		}
 	}
 
 	public void dropConnection(Connection pConnection) {
-		broadcast("SERVER", pConnection.name + " has left the room.");
+		connections.remove(pConnection);
+		broadcast(Packet.sendMessage("SERVER", pConnection.name + " has left the room."));
 		System.out.println("Client " + 
 								 pConnection.name + 
 								 " has disconnected.");
-		connections.remove(pConnection);
 		System.out.println("Total clients: " + connections.size());
    }
+	
+	public void updateClientLists() {
+		Vector<String> clients = new Vector<String>();
+		for(Connection client : connections) {
+			clients.add(client.name);
+		}
+		Packet client_list_packet = Packet.sendClientList("SERVER", clients);
+		broadcast(client_list_packet);
+	}
 }

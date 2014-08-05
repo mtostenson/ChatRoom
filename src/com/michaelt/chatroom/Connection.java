@@ -30,15 +30,35 @@ public class Connection {
 	public void listenToConnection() {
 		Thread clientListener = new Thread() {
 			public void run() {
-				while(true) {
+				boolean running = true;
+				while(running) {
 					try {
-						String message = (String)input.readObject();
-						if(message.equals("SERVER_SIGNAL_EXIT")) {
-							terminate();
+						Packet packet = (Packet)input.readObject();
+						switch(packet.packet_type) {
+							case MESSAGE:
+								server.broadcast(packet);
+								break;
+							case SIGNAL:
+							{
+								switch(packet.signal) {
+									case EXIT:
+										terminate();										
+										server.updateClientLists();
+										running = false;
+										break;
+									default:
+								}
+								break;
+							}
+						case CLIENT_LIST:
 							break;
-						}
-						else {
-							server.broadcast(name, message);							
+						case NAME:
+							name = packet.source;
+							server.broadcast(Packet.sendMessage("SERVER", name + " has entered."));
+							server.updateClientLists();
+							break;
+						default:
+							break;
 						}	
 					}
 					catch(Exception e) {
