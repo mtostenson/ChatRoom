@@ -38,31 +38,21 @@ public class Connection {
 							case MESSAGE:
 								server.broadcast(packet);
 								break;
-							case SIGNAL:
-							{
-								switch(packet.signal) {
-									case ENTER:
-										name = packet.source;
-										server.broadcast(Packet.sendMessage("SERVER",
-															  name +	" has entered."));
-										server.updateClientLists();
-										break;
-									case EXIT:
-										terminate();										
-										server.updateClientLists();
-										running = false;
-										break;
-									default:										
-								}
+							case CLIENT_ENTER:
+								name = packet.source;
+								server.sendClientLists();								
 								break;
-							}
-						case CLIENT_LIST:
-							break;
-						default:
-							break;
-						}	
+							case CLIENT_EXIT:
+								terminate();
+								server.broadcast(Packet.sendExit(packet.source));
+								running = false;
+								break;
+							default:										
+								break;
+						}
 					}
 					catch(Exception e) {
+						System.err.println("YUP");
 						System.err.println(e);
 					}
 				}

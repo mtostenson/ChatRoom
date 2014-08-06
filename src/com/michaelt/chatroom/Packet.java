@@ -1,19 +1,15 @@
 package com.michaelt.chatroom;
 
 import java.io.Serializable;
-import java.util.Vector;
 
 public class Packet implements Serializable {
 
 	// Generated serialVersionUID
    private static final long serialVersionUID = 1811522088531690623L;
 
-	enum PACKET_TYPE { MESSAGE, CLIENT_LIST, SIGNAL }
-	enum SIGNAL { ENTER, EXIT }
+	enum PACKET_TYPE { MESSAGE, SIGNAL, CLIENT_ENTER, CLIENT_EXIT }	
 	
-	PACKET_TYPE packet_type 	= null;
-	SIGNAL signal 					= null;
-	Vector<String> client_list = null;
+	PACKET_TYPE packet_type 	= null;	
 	String message 				= null;
 	String source					= null;
 
@@ -28,17 +24,16 @@ public class Packet implements Serializable {
 		return message_packet;
 	}
 	
-	public static Packet sendSignal(String pSource, SIGNAL pSignal) {
-		Packet signal_packet = new Packet(PACKET_TYPE.SIGNAL);
-		signal_packet.source = pSource;
-		signal_packet.signal = pSignal;
+	public static Packet sendEnter(String pSource) {
+		Packet signal_packet = new Packet(PACKET_TYPE.CLIENT_ENTER);
+		signal_packet.source = pSource;		
 		return signal_packet;
 	}
 	
-	public static Packet sendClientList(String pSource, Vector<String> pList) {
-		Packet client_list_packet = new Packet(PACKET_TYPE.CLIENT_LIST);
-		client_list_packet.source = pSource;
-		client_list_packet.client_list = pList;
-		return client_list_packet;
+	public static Packet sendExit(String pSource) {
+		Packet signal_packet = new Packet(PACKET_TYPE.CLIENT_EXIT);
+		signal_packet.source = pSource;		
+		return signal_packet;
 	}
+
 }

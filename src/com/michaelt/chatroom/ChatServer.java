@@ -33,12 +33,13 @@ public class ChatServer {
 						                   .getInetAddress()
 						                   .getHostAddress() 
 						                   + " connected.");
-						connections.add(newClient);
+						connections.add(newClient);						
 						newClient.listenToConnection();
 						System.out.println("Total clients: " + connections.size());						
 					}
 				} 
 				catch(IOException ioe) { 
+					System.err.println("here");
 					System.err.println(ioe); 
 				}
 			}
@@ -54,7 +55,6 @@ public class ChatServer {
 			}
 			catch(IOException ioe) {
 				System.err.println("CHECK");
-//				System.err.println("MESSAGE: " + ioe.getCause().getMessage());
 				System.err.println(ioe);
 			}
 		}
@@ -62,21 +62,15 @@ public class ChatServer {
 
 	public void dropConnection(Connection pConnection) {
 		connections.remove(pConnection);
-		broadcast(Packet.sendMessage("SERVER", 
-											  pConnection.name + 
-											  " has left the room."));
 		System.out.println("Client " + 
 								 pConnection.name + 
 								 " has disconnected.");
 		System.out.println("Total clients: " + connections.size());
    }
-	
-	public void updateClientLists() {
-		Vector<String> clients = new Vector<String>();
-		for(Connection client : connections) {
-			clients.add(client.name);
+
+	public void sendClientLists() {
+		for(Connection connection : connections) {
+			broadcast(Packet.sendEnter(connection.name));
 		}
-		Packet client_list_packet = Packet.sendClientList("SERVER", clients);
-		broadcast(client_list_packet);
-	}
+   }
 }
