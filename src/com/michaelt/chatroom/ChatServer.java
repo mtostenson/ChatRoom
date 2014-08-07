@@ -1,8 +1,5 @@
 package com.michaelt.chatroom;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -84,7 +81,7 @@ public class ChatServer {
 		}
    }
 	
-	// Retrive connection object by client name ---------------------------------
+	// Retrieve connection object by client name ---------------------------------
 	public Connection findConnectionByName(String pName) {
 		for(Connection connection : connections) {
 			if(connection.name.equals(pName))
@@ -105,9 +102,7 @@ public class ChatServer {
 			System.out.println("Connected to client on port 6505...");
 			byte[] filebytes = new byte[(int)packet.filesize];
 			System.out.format("Allocated byte[%d]...\n", (int)packet.filesize);
-			InputStream is = newSocket.getInputStream();
-			FileOutputStream fos = new FileOutputStream(new File(packet.message));
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			InputStream is = newSocket.getInputStream();			
 			int bytesRead = is.read(filebytes, 0, filebytes.length);
 			int current = bytesRead;
 			System.out.println("Starting loop...");
@@ -120,9 +115,8 @@ public class ChatServer {
 			System.out.println("Done looping.");
 			return filebytes;	
 		}
-		catch(Exception e){
-			System.out.println("OH NO!");
-			System.err.println(e);
+		catch(Exception e){			
+			System.err.println("SERVER EXCEPTOIN: " + e);
 			return null;		
 		}
    }

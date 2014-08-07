@@ -8,12 +8,14 @@ import java.net.Socket;
 
 public class Connection {
 
+	// Fields -------------------------------------------------------------------
 	ChatServer server;
 	Socket socket;
 	ObjectOutputStream output;
 	ObjectInputStream input;
 	String name;
 	
+	// Constructor --------------------------------------------------------------
 	public Connection(ChatServer pServer, ServerSocket serverSocket) {
 		try{
 			server = pServer;
@@ -26,7 +28,8 @@ public class Connection {
 			ioe.printStackTrace();
 		}		
 	}
-	
+
+	// Fire thread that listens for and handles packets on this connection ------
 	public void listenToConnection() {
 		Thread clientListener = new Thread() {
 			public void run() {
@@ -73,6 +76,7 @@ public class Connection {
 		clientListener.start();
 	}
 	
+	// Terminate and clean up connection ----------------------------------------
 	public void terminate() {
 		try {
 			server.dropConnection(this);		

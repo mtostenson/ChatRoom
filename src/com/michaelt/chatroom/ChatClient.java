@@ -102,8 +102,9 @@ public class ChatClient extends JFrame {
 			@Override
          public void actionPerformed(ActionEvent ae) {
 				try {
-					output.writeObject(Packet.sendMessage(clientName, 
-																	  text_input.getText()));
+					output.writeObject(
+						Packet.sendMessage(clientName, text_input.getText())
+					);
 					text_input.setText("");
 				}
 				catch(Exception e) {
