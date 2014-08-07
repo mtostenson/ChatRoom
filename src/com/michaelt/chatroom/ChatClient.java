@@ -1,7 +1,6 @@
 package com.michaelt.chatroom;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,8 +60,7 @@ public class ChatClient extends JFrame {
 		roster = new JList(model);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		text_display.setEditable(false);
-		text_display.setWrapStyleWord(true);
-		text_display.setBackground(Color.blue);
+		text_display.setWrapStyleWord(true);		
 		display_scroller.setPreferredSize(new Dimension(300, getHeight()));
 		add(display_scroller, BorderLayout.LINE_START);
 		roster.setPreferredSize(new Dimension(94, getHeight()));
@@ -165,7 +163,9 @@ public class ChatClient extends JFrame {
 			FileInputStream fis = new FileInputStream(pFile);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			int bytesRead = bis.read(filebytes, 0, filebytes.length);
-			System.out.format("Read %d bytes from %s.%n", bytesRead, pFile.getName());
+			System.out.format(
+				"Read %d bytes from %s.%n", bytesRead, pFile.getName()
+			);
 			OutputStream os = file_connection.getOutputStream();
 			System.out.println("Writing to outputstream....");
 			os.write(filebytes, 0, filebytes.length);
@@ -239,9 +239,11 @@ public class ChatClient extends JFrame {
 		}
 	}
 	
+	// Retrieve the file from server sent by other client -----------------------
 	private void downloadFromServer(Packet packet) {
 		try {
-			Socket download_socket = new Socket(InetAddress.getByName(hostname), 6506);
+			Socket download_socket = 
+				new Socket(InetAddress.getByName(hostname), 6506);
 			System.out.println("Connected to server on port 6506...");
 			byte[] filebytes = new byte[(int)packet.filesize];
 			System.out.format("Allocated byte[%d]...\n", (int)packet.filesize);
@@ -252,7 +254,8 @@ public class ChatClient extends JFrame {
 			int current = bytesRead;System.out.println("Starting loop...");
 			do{
 				System.out.format("bytesRead = %d%n", bytesRead);
-				bytesRead = is.read(filebytes, current, (filebytes.length - current));
+				bytesRead = 
+					is.read(filebytes, current, (filebytes.length - current));
 				if(bytesRead >= 0) current += bytesRead;
 			} while (current < filebytes.length);
 			System.out.println("Done looping.");

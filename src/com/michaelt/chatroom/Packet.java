@@ -38,7 +38,10 @@ public class Packet implements Serializable {
 		return signal_packet;
 	}
 	
-	public static Packet sendFileRequest(String pSource, String pDest, String pName, long pSize) {
+	public static Packet sendFileRequest(String pSource, 
+													 String pDest, 
+													 String pName, 
+													 long pSize) {
 		Packet file_request_packet = new Packet(PACKET_TYPE.FILE_REQUEST);
 		file_request_packet.source = pSource;
 		file_request_packet.destination = pDest;

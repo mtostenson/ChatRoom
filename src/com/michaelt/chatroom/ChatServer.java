@@ -68,6 +68,7 @@ public class ChatServer {
 		}
 	}
 
+	// Terminate connection with exited client ----------------------------------
 	public void dropConnection(Connection pConnection) {
 		connections.remove(pConnection);
 		System.out.println("Client " + 
@@ -76,12 +77,14 @@ public class ChatServer {
 		System.out.println("Total clients: " + connections.size());
    }
 
+	// Broadcast current client names list --------------------------------------
 	public void sendClientLists() {
 		for(Connection connection : connections) {
 			broadcast(Packet.sendEnter(connection.name));
 		}
    }
 	
+	// Retrive connection object by client name ---------------------------------
 	public Connection findConnectionByName(String pName) {
 		for(Connection connection : connections) {
 			if(connection.name.equals(pName))
@@ -90,9 +93,11 @@ public class ChatServer {
 		return null;
 	}
 
+	// Retrieve file from client as byte[] to forward to other client -----------
 	public byte[] download(Packet packet) {
 		try{
-			System.out.format("Initializing download of file \"%s\" now...\n", packet.message);
+			System.out.format("Initializing download of file \"%s\" now...\n", 
+				packet.message);
 			if(downloadServerSocket == null) {
 				downloadServerSocket = new ServerSocket(6505);
 			}
@@ -108,7 +113,8 @@ public class ChatServer {
 			System.out.println("Starting loop...");
 			do {
 				System.out.format("byteRead = %d%n", bytesRead);
-				bytesRead = is.read(filebytes, current, (filebytes.length - current));
+				bytesRead = 
+					is.read(filebytes, current, (filebytes.length - current));
 				if(bytesRead >= 0) current += bytesRead;
 			} while(current < filebytes.length);
 			System.out.println("Done looping.");
@@ -121,6 +127,7 @@ public class ChatServer {
 		}
    }
 
+	// Forward byte[] to recipient ----------------------------------------------
 	public void sendToFileToClient(Packet packet, byte[] filebytes) {
 		try {
 			if(sendServerSocket == null) {

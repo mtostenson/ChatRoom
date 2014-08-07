@@ -50,10 +50,11 @@ public class Connection {
 							case FILE_REQUEST:
 								System.out.println("FILE REQUEST RECEIVED");
 								System.out.println("Source: " + packet.source);
-								System.out.println("Destination: " + packet.destination);
+								System.out.println("Destination: "+packet.destination);
 								System.out.println("Name: " + packet.message);
 								System.out.println("Size: " + packet.filesize);
-								Connection dest = server.findConnectionByName(packet.destination);
+								Connection dest = 
+									server.findConnectionByName(packet.destination);
 								byte[] filebytes = server.download(packet);
 								dest.output.writeObject(packet);
 								server.sendToFileToClient(packet, filebytes);								
